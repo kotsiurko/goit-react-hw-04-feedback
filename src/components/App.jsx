@@ -6,28 +6,32 @@ import { Notification } from './Notification/Notification';
 import { Container } from './App.styled';
 
 export const App = () => {
-  const [mark, setMark] = useState({
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  });
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
 
   const onButtonClick = mark => {
-    setMark(prevState => {
-      return {
-        ...prevState,
-        [mark]: prevState[mark] + 1,
-      };
-    });
+    switch (mark) {
+      case 'good':
+        setGood(prev => prev + 1);
+        break;
+      case 'neutral':
+        setNeutral(prev => prev + 1);
+        break;
+      case 'bad':
+        setBad(prev => prev + 1);
+        break;
+      default:
+        return;
+    }
   };
 
-  const totalValCalc = () => {
-    return Object.values(mark).reduce((value, acc) => acc + value, 0);
-  };
-  let total = totalValCalc();
+  let total = good + neutral + bad;
+
+  const mark = { good, neutral, bad };
 
   const positivePercentageCalc = () => {
-    return Math.round((mark.good / total) * 100) || 0;
+    return Math.round((good / total) * 100) || 0;
   };
   let positivePercentage = positivePercentageCalc();
 
@@ -44,9 +48,9 @@ export const App = () => {
       <Section title="Statitics">
         {total ? (
           <Statistics
-            good={mark.good}
-            neutral={mark.neutral}
-            bad={mark.bad}
+            good={good}
+            neutral={neutral}
+            bad={bad}
             total={total}
             positivePercentage={positivePercentage}
           />
